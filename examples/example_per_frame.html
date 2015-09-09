@@ -1,0 +1,39 @@
+<canvas id="canvas"></canvas>
+<style>
+body {
+  background-color: black;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+</style>
+<script src="example_animation.js" type="text/javascript"></script>
+<script>
+function tick() {
+  update(300);
+  paint();
+}
+
+if (typeof CVR === 'undefined') {
+  alert('Fatal error, CVR not found!\nMake sure this file is served via CVR server or manually include CVR files!');
+  throw 'away';
+}
+
+alert('Let\'s start recording! (we\'ll record a random length 30 FPS 720p mp4 video)');
+var cvr = new CVR(canvas, 'per_frame_example', 30, {spoofWindowSize: [1280, 720]});
+
+function snapRandom() {
+  if (Math.random()<0.99) {
+    tick();
+    cvr.snap(snapRandom);
+  }
+  else cvr.finish(doneOrNot);
+}
+
+snapRandom();
+
+
+function doneOrNot() {
+  alert('End of recording. Either we\'re done or there was an error, check the server console.');
+}
+</script>

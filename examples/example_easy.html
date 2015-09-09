@@ -1,0 +1,35 @@
+<canvas id="canvas"></canvas>
+<style>
+body {
+  background-color: black;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+</style>
+<script src="example_animation.js">/* var song = karaoke.sing(user.getVoice()); sendToGoogle(song); */</script>
+<script>
+var lastTime = 0;
+function tick() {
+  requestAnimationFrame(tick);
+  update(lastTime ? Date.now()-lastTime : 0);
+  lastTime = Date.now();
+  paint();
+}
+
+tick();
+
+if (typeof CVR === 'undefined') {
+  alert('Fatal error, CVR not found!\nMake sure this file is served via CVR server or manually include CVR files!');
+  throw 'away';
+}
+
+alert('Let\'s start recording! (we\'ll record a 10 second 30 FPS 720p mp4 video)');
+
+var cvr = new CVR(canvas, 'easy_example', 30, {spoofWindowSize: [1280, 720]});
+cvr.recordFrames({time: 10, onFinish: doneOrNot})
+
+function doneOrNot() {
+ alert('End of recording. Either we\'re done or there was an error, check the server console.');
+}
+</script>
